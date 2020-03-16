@@ -1,0 +1,6 @@
+*.cbp
+*.dia
+*.png
+bin/
+obj/
+*.depend
