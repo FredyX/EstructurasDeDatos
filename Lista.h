@@ -1,54 +1,82 @@
 #include<stdbool.h>
 #include<stdio.h>
-/******************************Definiendo TDA Nodos *****************************************/
-struct Nodos
+
+
+enum tipos{INT, FLOAT, DOUBLE, CHAR, STRING, VOID}; //enumeraciones que simularan los tipos de datos ofrecidos por el lenguaje
+typedef enum tipos Tipo;                                 // se define un alias para los enum
+
+/********************************Definiendo TDA Nodos *******************************************/
+typedef struct ElementoNodo
 {
-    struct Nodos *enlace;
-    int dato;
-};
-typedef struct Nodos Nodo; // asignado un alias para el tipo de dato struct Nodos
-/********************************************************************************************/
-
-/**********************************OPERACIONES************************************************
-*********************************************************************************************/
-
-int tamanoLista(Nodo *primeroNodo){
-    int contador = 1;
-    Nodo * enlaceTemporal = (*primeroNodo).enlace;
-    while (enlaceTemporal !=NULL){
-        contador++;
-        enlaceTemporal = (*enlaceTemporal).enlace;
+    struct ElementoNodo *enlace;
+    union{                           //se utilizara para almacenar los distitos tipos de datos
+        int Int;
+        float Float;
+        double Double;
+        char  *String;
+        void *Void;
     }
+} Nodo;
+/*************************************************************************************************/
 
-    return contador;
+
+/********************************Definiendo TDA Lista *******************************************/
+typedef struct ElementoLista{
+    Nodo *primerNodo;
+    Nodo *ultimoNodo;
+    unsigned tamano;
+    Tipo tipoDato;
+}Lista;
+/*************************************************************************************************/
+
+
+/***************************************OPERACIONES************************************************
+***************************************************************************************************/
+
+void inicializarLista(Lista *lista, Tipo tipo){
+    lista->primerNodo = NULL;
+    lista->ultimoNodo = NULL;
+    lista->tamano = 0;
+    lista->tipoDato = tipo;
 }
-bool agregarFinal(Nodo * primerNodo, int valor){
-    Nodo nodo = *primerNodo;
-    if(nodo.enlace != NULL){
-        Nodo nodoAnterior;
-        bool finalEncontrado = false;
-        while (!finalEncontrado)
-        {
-            nodoAnterior = nodo;
-            nodo = *nodo.enlace;
-            if(nodo.enlace == NULL){
-                Nodo nuevo;
-                nuevo.dato = valor;
-                nuevo.enlace = NULL;
-                (*nodoAnterior.enlace).enlace = &nuevo;
-                finalEncontrado = true;
-               break;
-            }
-        }
 
-    }
-    else
-    {
-        Nodo nuevo;
-        nuevo.dato = valor;
-        nuevo.enlace = NULL;
-        (*primerNodo).enlace = &nuevo;
-    }
+int tamanoLista(Lista *lista){
+    //por implementar
+}
 
-    return false;
+bool insertarPorIndice(Lista *lista, int valor, unsigned int indice ){
+    //por implementar
+}
+
+bool insertarPrimero(Lista *lista, int valor){
+    //por implementar
+}
+
+bool insertarUltimo(Lista* lista, int valor){
+    //por implementar
+}
+
+int localizarDato(Lista *lista, int valor){
+    //por implementar
+}
+
+bool eliminarPorIndice(Lista *lista, unsigned int indice){
+    //por implementar
+}
+
+void vaciarLista(Lista *lista){
+    //por implementar
+}
+
+int obtenerDato(Lista *lista, int dato)
+{
+    //por implementar
+}
+
+int obtenerPorIndice(Lista *lista, unsigned int indice){
+    //por implementar
+}
+
+Tipo tipoDeLista(Lista *lista){
+ //Por implementar
 }
