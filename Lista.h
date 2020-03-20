@@ -15,7 +15,7 @@ typedef struct ElementoNodo
         double Double;
         char  *String;
         void *Void;
-    }
+    };
 } Nodo;
 /*************************************************************************************************/
 
@@ -30,8 +30,9 @@ typedef struct ElementoLista{
 /*************************************************************************************************/
 
 
-/***************************************OPERACIONES************************************************
-***************************************************************************************************/
+/*==================================================================================================*
+ *                                           Operaciones                                            *
+ *==================================================================================================*/
 
 void inicializarLista(Lista *lista, Tipo tipo){
     lista->primerNodo = NULL;
@@ -40,12 +41,48 @@ void inicializarLista(Lista *lista, Tipo tipo){
     lista->tipoDato = tipo;
 }
 
-int tamanoLista(Lista *lista){
+unsigned int tamanoLista(Lista *lista){
     //por implementar
+    return lista->tamano;
 }
 
-bool insertarPorIndice(Lista *lista, int valor, unsigned int indice ){
-    //por implementar
+bool vacia(Lista *lista){
+    if((lista->primerNodo == NULL) && (lista->ultimoNodo == NULL))
+        return true;
+    else
+        return false;
+
+}
+
+bool insertarPorIndice(Lista *lista, void * dato, unsigned int indice ){
+   bool exito = false;
+   if((indice>=0) && (indice < lista->tamano)){
+        Nodo nuevo;
+        nuevo.enlace = NULL;
+        Tipo tipo = lista->tipoDato;
+        switch(tipo){
+            case INT :;  //al parecer no se puede declarar una variable despues de un case,primera declaracion vacia por esta razon
+                int valorInt = *((int *)dato);
+                nuevo.Int = valorInt;
+                break;
+            case FLOAT :;
+                float valorFloat = *((float *)dato);
+                nuevo.Float = valorFloat;
+                break;
+            case DOUBLE :;
+                double valorDouble = *((double*)dato);
+                nuevo.Double = valorDouble;
+                break;
+            case CHAR:;
+                char *valorPtrChar = ((char*)dato);
+                nuevo.String = valorPtrChar;
+                break;
+            case VOID :;
+                nuevo.Void = dato;
+        }
+
+   }
+
 }
 
 bool insertarPrimero(Lista *lista, int valor){
