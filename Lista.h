@@ -1,5 +1,6 @@
 #include<stdbool.h>
 #include<stdio.h>
+#include<stdlib.h>
 
 
 enum tipos{INT, FLOAT, DOUBLE, CHAR, STRING, VOID}; //enumeraciones que simularan los tipos de datos ofrecidos por el lenguaje
@@ -56,37 +57,71 @@ bool vacia(Lista *lista){
 
 bool insertarPorIndice(Lista *lista, void * dato, unsigned int indice ){
    bool exito = false;
-   if((indice>=0) && (indice < lista->tamano)){
-        Nodo nuevo;
-        nuevo.enlace = NULL;
+   if((indice>=0) && ((indice < lista->tamano) || indice == 0)){
+        Nodo *nuevo = (Nodo*)malloc(sizeof(nuevo));             //declaracion del nuevo nodo
+        if(nuevo == NULL)                                       //retorna un false si no se puede asginar memoria
+            return false;
+        nuevo->enlace = NULL;
         Tipo tipo = lista->tipoDato;
         switch(tipo){
             case INT :;  //al parecer no se puede declarar una variable despues de un case,primera declaracion vacia por esta razon
                 int valorInt = *((int *)dato);
-                nuevo.Int = valorInt;
+                nuevo->Int = valorInt;
                 break;
             case FLOAT :;
                 float valorFloat = *((float *)dato);
-                nuevo.Float = valorFloat;
+                nuevo->Float = valorFloat;
                 break;
             case DOUBLE :;
                 double valorDouble = *((double*)dato);
-                nuevo.Double = valorDouble;
+                nuevo->Double = valorDouble;
                 break;
             case CHAR:;
                 char *valorPtrChar = ((char*)dato);
-                nuevo.String = valorPtrChar;
+                nuevo->String = valorPtrChar;
                 break;
             case VOID :;
-                nuevo.Void = dato;
+                nuevo->Void = dato;
+        }
+        if(vacia(lista)){
+            lista->primerNodo = nuevo;
+            lista->ultimoNodo = nuevo;
+            lista->tamano = 1;//conviene realizar un funcion obtener y establecer tamano de la lista
+            exito = true;
+        }else{
+            if(indice == 0){
+                nuevo->enlace = lista->primerNodo;
+                lista->primerNodo = nuevo;
+                lista->tamano +=1;
+                exito = true;
+            }else{
+                Nodo *nodoActual = (Nodo*)malloc(sizeof(nodoActual));
+                if(nodoActual == NULL)
+                    return false;
+                nodoActual = lista->primerNodo;
+                for(unsigned int i = 0; i<tamanoLista(lista); i++){
+                    if(i == (indice - 1)){
+                        Nodo *copiaNodo = (Nodo *)malloc(sizeof(copiaNodo));
+                        copiaNodo = nodoActual->enlace;
+                        nodoActual->enlace = nuevo;
+                        nuevo->enlace = copiaNodo;
+                        lista->tamano +=1;
+                        exito = true;
+                    }
+                    nodoActual = nodoActual->enlace;
+                }
+            }
         }
 
    }
-
+    return exito;
 }
 
-bool insertarPrimero(Lista *lista, int valor){
-    //por implementar
+bool insertarPrimero(Lista *lista, void *dato){
+    if(insertarPorIndice(lista, dato, 0)==true)
+        return true;
+    else
+        return false;
 }
 
 bool insertarUltimo(Lista* lista, int valor){
