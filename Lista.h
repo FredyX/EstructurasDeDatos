@@ -4,13 +4,15 @@
 
 
 enum tipos{INT, FLOAT, DOUBLE, CHAR, STRING, VOID}; //enumeraciones que simularan los tipos de datos ofrecidos por el lenguaje
-typedef enum tipos Tipo;                                 // se define un alias para los enum
+typedef enum tipos Tipo;                           // se define un alias para los enum
 
-/********************************Definiendo TDA Nodos *******************************************/
+/*===================================================================================================*
+ *                                    Definiendo TAD Nodos                                           *
+ *===================================================================================================*/
 typedef struct ElementoNodo
 {
     struct ElementoNodo *enlace;
-    union{                           //se utilizara para almacenar los distitos tipos de datos
+    union{                                         //se utilizara para almacenar los distitos tipos de datos
         int Int;
         float Float;
         double Double;
@@ -18,22 +20,29 @@ typedef struct ElementoNodo
         void *Void;
     };
 } Nodo;
-/*************************************************************************************************/
+/*===================================================================================================*
+ *                                                                                                   *
+ *===================================================================================================*/
 
 
-/********************************Definiendo TDA Lista *******************************************/
+/*===================================================================================================*
+ *                                    Definiendo TAD Lista                                           *
+ *===================================================================================================*/
 typedef struct ElementoLista{
     Nodo *primerNodo;
     Nodo *ultimoNodo;
     unsigned tamano;
     Tipo tipoDato;
 }Lista;
-/*************************************************************************************************/
+/*===================================================================================================*
+ *                                                                                                   *
+ *===================================================================================================*/
 
+/*******************************************************************************************************************/
 
-/*==================================================================================================*
- *                                           Operaciones                                            *
- *==================================================================================================*/
+/*===================================================================================================*
+ *                                           Operaciones                                             *
+ *===================================================================================================*/
 
 void inicializarLista(Lista *lista, Tipo tipo){
     lista->primerNodo = NULL;
@@ -86,7 +95,7 @@ bool insertarPorIndice(Lista *lista, void * dato, unsigned int indice ){
         if(vacia(lista)){
             lista->primerNodo = nuevo;
             lista->ultimoNodo = nuevo;
-            lista->tamano = 1;//conviene realizar un funcion obtener y establecer tamano de la lista
+            lista->tamano = 1;          //conviene realizar un funcion obtener y establecer tamano de la lista
             exito = true;
         }else{
             if(indice == 0){
@@ -124,8 +133,49 @@ bool insertarPrimero(Lista *lista, void *dato){
         return false;
 }
 
-bool insertarUltimo(Lista* lista, int valor){
-    //por implementar
+bool insertarUltimo(Lista* lista, void* dato){
+    Nodo *nuevo = (Nodo*)malloc(sizeof(nuevo));             //declaracion del nuevo nodo
+    if(nuevo == NULL)                                       //retorna un false si no se puede asginar memoria
+        return false;
+    nuevo->enlace = NULL;
+    Tipo tipo = lista->tipoDato;
+    switch(tipo){
+        case INT :;  //al parecer no se puede declarar una variable despues de un case,primera declaracion vacia por esta razon
+            int valorInt = *((int *)dato);
+            nuevo->Int = valorInt;
+            break;
+        case FLOAT :;
+            float valorFloat = *((float *)dato);
+            nuevo->Float = valorFloat;
+            break;
+        case DOUBLE :;
+            double valorDouble = *((double*)dato);
+            nuevo->Double = valorDouble;
+            break;
+        case CHAR:;
+            char *valorPtrChar = ((char*)dato);
+            nuevo->String = valorPtrChar;
+            break;
+        case VOID :;
+            nuevo->Void = dato;
+     }
+    if(vacia(lista)){
+        lista->primerNodo = nuevo;
+        lista->ultimoNodo = nuevo;
+        lista->tamano = 1;
+        return true;
+    }else{
+        Nodo *temporal;
+        temporal = (Nodo*)malloc(sizeof(temporal));
+        if(temporal == NULL)
+            return false;
+        temporal = lista->ultimoNodo;
+        temporal->enlace = nuevo;
+        lista->ultimoNodo =nuevo;
+        lista->tamano++;
+        return true;
+    }
+
 }
 
 int localizarDato(Lista *lista, int valor){
