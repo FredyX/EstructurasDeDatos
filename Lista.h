@@ -195,10 +195,36 @@ int obtenerDato(Lista *lista, int dato)
     //por implementar
 }
 
-int obtenerPorIndice(Lista *lista, unsigned int indice){
-    //por implementar
+Nodo obtenerPorIndice(Lista *lista, unsigned int indice){
+    if((indice>=0) && ((indice < lista->tamano) || indice == 0)){
+        if(!vacia(lista)){
+            if(indice == 0){
+                Nodo nodoRetorno = *(lista->primerNodo);
+                nodoRetorno.enlace=NULL;
+                return nodoRetorno;
+            }else{
+                if(indice == (lista->tamano-1)){
+                    Nodo nodoRetorno = *(lista->ultimoNodo);
+                    nodoRetorno.enlace = NULL;
+                    return nodoRetorno;
+                }else{
+                    Nodo *nodoActual = lista->primerNodo;
+                    for(unsigned int i = 0; i<(lista->tamano-1); i++){
+                        if(indice == i){
+                            Nodo nodoRetorno = *(nodoActual);
+                            nodoRetorno.enlace = NULL;
+                            return nodoRetorno;
+                        }
+                        nodoActual = nodoActual->enlace;
+                    }
+                }
+            }
+        }
+
+
+    }
 }
 
 Tipo tipoDeLista(Lista *lista){
- //Por implementar
+    return lista->tipoDato;
 }
