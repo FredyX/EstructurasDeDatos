@@ -11,16 +11,18 @@ typedef struct {
 int main(){
     Lista *lista = (Lista *)malloc(sizeof(Lista));//se reserva un espacio de memoria dinamica
     Empleado empleado1,empleado2,empleado3;
-    empleado1.nombre = "Zeldris";
-    empleado2.nombre = "Jazmin";
-    empleado3.nombre = "coba";
+    empleado1.nombre = "Pepe";
+    empleado2.nombre = "Juana";
+    empleado3.nombre = "Maria";
     inicializarLista(lista,VOID);
     printf("*****El tamano de la lista es :  %d\n\n",lista->tamano);
     for(unsigned i = 0; i<10 ; i++){
         insertar(lista,&empleado1);
-        insertar(lista,&empleado1);
         insertarUltimo(lista,&empleado2);
+
+
     }
+    insertarPorIndice(lista,&empleado3,7);
     printf("*********Se imprimiran todos los elementos de la lista*********\n\n");
     unsigned contador = 0;
     while(contador <(lista->tamano)){
@@ -29,7 +31,7 @@ int main(){
         contador++;
     }
     printf("\n*****El tamano de la lista es :  %d\n\n",lista->tamano);
-    Empleado *ptrEmpleado = obtenerPorIndice(lista, 6).Void;
+    Empleado *ptrEmpleado = obtenerPorIndice(lista, 0).Void;
     printf("====El nombre del empleado es==== jjj: %s\n",ptrEmpleado->nombre);
     free(lista);
 return 0;

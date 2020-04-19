@@ -138,53 +138,47 @@ bool insertar(Lista *lista, void *dato){
 }
 
 bool insertarUltimo(Lista* lista, void* dato){
- /* Nodo *nuevo = (Nodo*)malloc(sizeof(Nodo));             //declaracion del nuevo nodo
-    if(nuevo == NULL)                                       //retorna un false si no se puede asginar memoria
-        return false;
-    nuevo->enlace = NULL;
-    Tipo tipo = lista->tipoDato;
-    switch(tipo){
-        case INT :;  //al parecer no se puede declarar una variable despues de un case,primera declaracion vacia por esta razon
-            int valorInt = *((int *)dato);
-            nuevo->Int = valorInt;
-            break;
-        case FLOAT :;
-            float valorFloat = *((float *)dato);
-            nuevo->Float = valorFloat;
-            break;
-        case DOUBLE :;
-            double valorDouble = *((double*)dato);
-            nuevo->Double = valorDouble;
-            break;
-        case CHAR:;
-            char *valorPtrChar = ((char*)dato);
-            nuevo->String = valorPtrChar;
-            break;
-        case VOID :;
-            nuevo->Void = dato;
-     }
-    if(vacia(lista)){
-        lista->primerNodo = nuevo;
-        lista->ultimoNodo = nuevo;
-        lista->tamano = 1;
-        return true;
-    }else{
-        Nodo *temporal;
-        temporal = (Nodo*)malloc(sizeof(Nodo));
-        if(temporal == NULL)
+    int indice = (lista->tamano -1);
+    if(indice == -1)                                            //corrige si la lista cuenta con 0 elementos
+        indice = 0;
+    if((indice == 0 )&& (lista->tamano)== 1){                   //Si la lista tiene un solo elemento y se necesita agregar al ultimo
+        Nodo *nuevo = (Nodo *)malloc(sizeof(Nodo));             //declaracion del nuevo nodo
+        if(nuevo == NULL)                                       //retorna un false si no se puede asginar memoria
             return false;
-        temporal = lista->ultimoNodo;
-        temporal->enlace = nuevo;
-        lista->ultimoNodo =nuevo;
-        lista->tamano++;
-        return true;
-    }*/
+        nuevo->enlace = NULL;
+        Tipo tipo = lista->tipoDato;
+        switch(tipo){
+            case INT :;  //al parecer no se puede declarar una variable despues de un case,primera declaracion vacia por esta razon
+                int valorInt = *((int *)dato);
+                nuevo->Int = valorInt;
+                break;
+            case FLOAT :;
+                float valorFloat = *((float *)dato);
+                nuevo->Float = valorFloat;
+                break;
+            case DOUBLE :;
+                double valorDouble = *((double*)dato);
+                nuevo->Double = valorDouble;
+                break;
+            case CHAR:;
+                char *valorPtrChar = ((char*)dato);
+                nuevo->String = valorPtrChar;
+                break;
+            case VOID :;
+                nuevo->Void = dato;
+         }
+            Nodo *auxiliar = lista->primerNodo;
+            auxiliar->enlace = nuevo;
+            lista->ultimoNodo = nuevo;
+            lista->tamano++;
+            return true;
+    }else{                                                      //si la lista tiene 2 o mas elementos
+        if(insertarPorIndice(lista, dato,indice))
+            return true;
+        else
+            return false;
+    }
 
-    unsigned indice = (lista->tamano -1);
-    if(insertarPorIndice(lista, dato,indice))
-        return true;
-    else
-        return false;
 }
 
 int localizarDato(Lista *lista, int valor){
