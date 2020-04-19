@@ -1,26 +1,36 @@
 #include<stdio.h>
 #include "Lista.h"
 
-int main(){
-    Lista *lista = (Lista *)malloc(sizeof(Lista)); //se reserva un espacio de memoria dinamica
-    inicializarLista(lista,INT);
-    int numero1 = 1;
-    int numero2 = 2;
-    int numero3 = 3;
-    int numero4 = 4;
-    int numero5 = 5;
-    printf("El tamano de la lista es %d: \n",tamanoLista(lista));
-    insertarPrimero(lista,&numero1);
-    insertarPrimero(lista,&numero2);
-    insertarPrimero(lista,&numero3);
-    insertarPrimero(lista,&numero4);
-    insertarPrimero(lista,&numero5);
+typedef struct {
+    char *nombre;
+    char *apellido;
+    unsigned edad;
+    char* cargo;
+}Empleado;
 
-    printf("El tamano de la lista es %d: \n",tamanoLista(lista));
-    printf("El valor almacenado es  %d \n",obtenerPorIndice(lista,0).Int);
-    printf("El valor almacenado es  %d \n",obtenerPorIndice(lista,1).Int);
-    printf("El valor almacenado es  %d \n",obtenerPorIndice(lista,2).Int);
-    printf("El valor almacenado es  %d \n",obtenerPorIndice(lista,3).Int);
-    printf("El valor almacenado es  %d \n",obtenerPorIndice(lista,4).Int);
+int main(){
+    Lista *lista = (Lista *)malloc(sizeof(Lista));//se reserva un espacio de memoria dinamica
+    Empleado empleado1,empleado2,empleado3;
+    empleado1.nombre = "Zeldris";
+    empleado2.nombre = "Jazmin";
+    empleado3.nombre = "coba";
+    inicializarLista(lista,VOID);
+    printf("*****El tamano de la lista es :  %d\n\n",lista->tamano);
+    for(unsigned i = 0; i<10 ; i++){
+        insertar(lista,&empleado1);
+        insertar(lista,&empleado1);
+        insertarUltimo(lista,&empleado2);
+    }
+    printf("*********Se imprimiran todos los elementos de la lista*********\n\n");
+    unsigned contador = 0;
+    while(contador <(lista->tamano)){
+        Empleado *ptrEmpleado = obtenerPorIndice(lista, contador).Void;
+        printf("====El nombre del empleado es==== : %s\n",ptrEmpleado->nombre);
+        contador++;
+    }
+    printf("\n*****El tamano de la lista es :  %d\n\n",lista->tamano);
+    Empleado *ptrEmpleado = obtenerPorIndice(lista, 6).Void;
+    printf("====El nombre del empleado es==== jjj: %s\n",ptrEmpleado->nombre);
+    free(lista);
 return 0;
 }

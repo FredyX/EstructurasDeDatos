@@ -38,7 +38,7 @@ typedef struct ElementoLista{
  *                                                                                                   *
  *===================================================================================================*/
 
-/*******************************************************************************************************************/
+
 
 /*===================================================================================================*
  *                                           Operaciones                                             *
@@ -64,10 +64,10 @@ bool vacia(Lista *lista){
 
 }
 
-bool insertarPorIndice(Lista *lista, void * dato, unsigned int indice ){
+bool insertarPorIndice(Lista *lista, void * dato, unsigned indice ){
    bool exito = false;
    if((indice>=0) && ((indice < lista->tamano) || indice == 0)){
-        Nodo *nuevo = (Nodo*)malloc(sizeof(nuevo));             //declaracion del nuevo nodo
+        Nodo *nuevo = (Nodo*)malloc(sizeof(Nodo));             //declaracion del nuevo nodo
         if(nuevo == NULL)                                       //retorna un false si no se puede asginar memoria
             return false;
         nuevo->enlace = NULL;
@@ -100,24 +100,28 @@ bool insertarPorIndice(Lista *lista, void * dato, unsigned int indice ){
         }else{
             if(indice == 0){
                 nuevo->enlace = lista->primerNodo;
-                lista->primerNodo = nuevo;
-                lista->tamano +=1;
+                lista->primerNodo = nuevo;  // se inserto en la primera posicion
+                lista->tamano++;
                 exito = true;
             }else{
-                Nodo *nodoActual = (Nodo*)malloc(sizeof(nodoActual));
-                if(nodoActual == NULL)
-                    return false;
-                nodoActual = lista->primerNodo;
-                for(unsigned int i = 0; i<tamanoLista(lista); i++){
-                    if(i == (indice - 1)){
-                        Nodo *copiaNodo = (Nodo *)malloc(sizeof(copiaNodo));
-                        copiaNodo = nodoActual->enlace;
-                        nodoActual->enlace = nuevo;
-                        nuevo->enlace = copiaNodo;
-                        lista->tamano +=1;
-                        exito = true;
+                if(indice == (lista->tamano-1)){ // si el el elemento que se quiere instertar es el ultimo
+                    Nodo *auxiliar  = lista->ultimoNodo;
+                    auxiliar->enlace = nuevo;       // se inserto en la ultima posicion
+                    nuevo->enlace = NULL;
+                    lista->ultimoNodo = nuevo;
+                    exito = true;
+                    lista->tamano++;
+                }else{
+                    Nodo *auxiliar = lista->primerNodo;
+                    for(unsigned i = 0; i<indice; i++){
+                        if(i == (indice - 1)){
+                            nuevo->enlace = auxiliar->enlace;
+                            auxiliar->enlace = nuevo;    // se agrega el nuevo nodo en la posicion deseada
+                            lista->tamano++;
+                            return true;
+                        }
+                        auxiliar = auxiliar->enlace;
                     }
-                    nodoActual = nodoActual->enlace;
                 }
             }
         }
@@ -126,15 +130,15 @@ bool insertarPorIndice(Lista *lista, void * dato, unsigned int indice ){
     return exito;
 }
 
-bool insertarPrimero(Lista *lista, void *dato){
-    if(insertarPorIndice(lista, dato, 0)==true)
+bool insertar(Lista *lista, void *dato){
+    if(insertarPorIndice(lista, dato, 0))
         return true;
     else
         return false;
 }
 
 bool insertarUltimo(Lista* lista, void* dato){
-    Nodo *nuevo = (Nodo*)malloc(sizeof(nuevo));             //declaracion del nuevo nodo
+ /* Nodo *nuevo = (Nodo*)malloc(sizeof(Nodo));             //declaracion del nuevo nodo
     if(nuevo == NULL)                                       //retorna un false si no se puede asginar memoria
         return false;
     nuevo->enlace = NULL;
@@ -166,7 +170,7 @@ bool insertarUltimo(Lista* lista, void* dato){
         return true;
     }else{
         Nodo *temporal;
-        temporal = (Nodo*)malloc(sizeof(temporal));
+        temporal = (Nodo*)malloc(sizeof(Nodo));
         if(temporal == NULL)
             return false;
         temporal = lista->ultimoNodo;
@@ -174,8 +178,13 @@ bool insertarUltimo(Lista* lista, void* dato){
         lista->ultimoNodo =nuevo;
         lista->tamano++;
         return true;
-    }
+    }*/
 
+    unsigned indice = (lista->tamano -1);
+    if(insertarPorIndice(lista, dato,indice))
+        return true;
+    else
+        return false;
 }
 
 int localizarDato(Lista *lista, int valor){
@@ -189,13 +198,13 @@ bool eliminarPorIndice(Lista *lista, unsigned int indice){
 void vaciarLista(Lista *lista){
     //por implementar
 }
-
+/*
 int obtenerDato(Lista *lista, int dato)
 {
     //por implementar
-}
+}*/
 
-Nodo obtenerPorIndice(Lista *lista, unsigned int indice){
+Nodo obtenerPorIndice(Lista *lista, unsigned indice){
     if((indice>=0) && ((indice < lista->tamano) || indice == 0)){
         if(!vacia(lista)){
             if(indice == 0){
@@ -209,7 +218,7 @@ Nodo obtenerPorIndice(Lista *lista, unsigned int indice){
                     return nodoRetorno;
                 }else{
                     Nodo *nodoActual = lista->primerNodo;
-                    for(unsigned int i = 0; i<(lista->tamano-1); i++){
+                    for(unsigned i = 0; i<(lista->tamano); i++){
                         if(indice == i){
                             Nodo nodoRetorno = *(nodoActual);
                             nodoRetorno.enlace = NULL;
