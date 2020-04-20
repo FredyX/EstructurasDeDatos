@@ -47,7 +47,6 @@ void inicializarLista(Lista *lista, Tipo tipo){
 }
 
 unsigned int tamanoLista(Lista *lista){
-    //por implementar
     return lista->tamano;
 }
 
@@ -90,7 +89,7 @@ bool insertarPorIndice(Lista *lista, void * dato, unsigned indice ){
         if(vacia(lista)){
             lista->primerNodo = nuevo;
             lista->ultimoNodo = nuevo;
-            lista->tamano = 1;          //conviene realizar un funcion obtener y establecer tamano de la lista
+            lista->tamano = 1;
             exito = true;
         }else{
             if(indice == 0){
@@ -124,7 +123,7 @@ bool insertarPorIndice(Lista *lista, void * dato, unsigned indice ){
    }
     return exito;
 }
-
+//Esta Funcion inserta al inicio de la lista
 bool insertar(Lista *lista, void *dato){
     if(insertarPorIndice(lista, dato, 0))
         return true;
@@ -174,10 +173,6 @@ bool insertarUltimo(Lista* lista, void* dato){
             return false;
     }
 
-}
-
-int localizarDato(Lista *lista, int valor){
-    //por implementar
 }
 
 bool eliminarPorIndice(Lista *lista, unsigned indice){
@@ -242,7 +237,25 @@ bool eliminarPrimero(Lista* lista){
         return false;
 }
 void vaciarLista(Lista *lista){
-    //por implementar
+    if(!vacia(lista)){
+        /*=====inicializacion====*/
+        Nodo *auxiliar = lista->primerNodo;
+        Nodo *anterior = auxiliar;
+        /*=======================*/
+
+        while(auxiliar != NULL){
+            auxiliar = auxiliar->enlace;
+            anterior->enlace = NULL;
+            //probable problema de fuga de memoria
+            free(anterior);
+            lista->tamano--;
+            anterior = auxiliar;
+        }
+        lista->primerNodo = NULL;
+        lista->ultimoNodo = NULL;
+        lista->tamano = 0;
+    }
+
 }
 
 
@@ -277,7 +290,7 @@ Nodo obtenerPorIndice(Lista *lista, unsigned indice){
 }
 
 Nodo obtenerPrimero(Lista* lista){             //devuelve el primero elemento de la lista
-    return obtenerPorIndice(lista, 0);;
+    return obtenerPorIndice(lista, 0);
 }
 
 Nodo obtenerUltimo(Lista* lista){
