@@ -20,9 +20,6 @@ typedef struct ElementoNodo
         void *Void;
     };
 } Nodo;
-/*===================================================================================================*
- *                                                                                                   *
- *===================================================================================================*/
 
 
 /*===================================================================================================*
@@ -34,9 +31,7 @@ typedef struct ElementoLista{
     unsigned tamano;
     Tipo tipoDato;
 }Lista;
-/*===================================================================================================*
- *                                                                                                   *
- *===================================================================================================*/
+
 
 
 
@@ -185,18 +180,71 @@ int localizarDato(Lista *lista, int valor){
     //por implementar
 }
 
-bool eliminarPorIndice(Lista *lista, unsigned int indice){
-    //por implementar
+bool eliminarPorIndice(Lista *lista, unsigned indice){
+    if(indice >=0 && indice< (lista->tamano)){
+        if(vacia(lista)){        //si la lista esta vacia
+            return false;
+        }else{
+            if(indice == 0){  // ingresa a esta seccion si el elemento que se quiere eliminar es el primero
+                Nodo *auxiliar = lista->primerNodo;
+                Nodo *auxEliminar = lista->primerNodo;
+                auxiliar = auxiliar->enlace;
+                lista->primerNodo = auxiliar;
+                free(auxEliminar);
+                lista->tamano--;
+                return true;
+            }else{
+                if(indice == lista->tamano -1){ // si el elemento que se quiere eliminar es el ultimo
+                    Nodo *auxiliar = lista->primerNodo;
+                    for(unsigned i = 0; i<(lista->tamano - 1); i++){
+                        if(i == (lista->tamano-2)){
+                            Nodo *auxEliminar = lista->ultimoNodo;
+                            lista->ultimoNodo = auxiliar;
+                            free(auxEliminar);
+                            lista->tamano--;
+                            return true;
+                        }
+                        auxiliar = auxiliar->enlace;
+                    }
+                }else{      //ingresa si es un elemento intermedio
+                    Nodo *auxiliar = lista->primerNodo;
+                    Nodo *anterior = auxiliar;
+                    for(unsigned i = 0 ; i<lista->tamano-1;i++){
+                        auxiliar = auxiliar->enlace;
+                        if(indice == i){
+                            anterior->enlace = auxiliar->enlace;
+                            auxiliar->enlace=NULL;
+                            free(auxiliar);
+                            lista->tamano--;
+                            return true;
+                        }
+                        anterior = auxiliar;
+                    }
+                }
+            }
+        }
+    }else{
+        return false;
+    }
 }
 
+bool eliminarUltimo(Lista *lista){
+    if(eliminarPorIndice(lista, (lista->tamano -1)))
+        return true;
+    else
+        return false;
+
+}
+bool eliminarPrimero(Lista* lista){
+    if(eliminarPorIndice(lista, 0))
+        return true;
+    else
+        return false;
+}
 void vaciarLista(Lista *lista){
     //por implementar
 }
-/*
-int obtenerDato(Lista *lista, int dato)
-{
-    //por implementar
-}*/
+
 
 Nodo obtenerPorIndice(Lista *lista, unsigned indice){
     if((indice>=0) && ((indice < lista->tamano) || indice == 0)){
@@ -228,6 +276,18 @@ Nodo obtenerPorIndice(Lista *lista, unsigned indice){
     }
 }
 
+Nodo obtenerPrimero(Lista* lista){             //devuelve el primero elemento de la lista
+    return obtenerPorIndice(lista, 0);;
+}
+
+Nodo obtenerUltimo(Lista* lista){
+    if(!vacia(lista)){
+        return obtenerPorIndice(lista,(lista->tamano-1));
+    }else{
+        Nodo nodo;
+        return nodo;
+    }
+}
 Tipo tipoDeLista(Lista *lista){
     return lista->tipoDato;
 }

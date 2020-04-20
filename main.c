@@ -16,13 +16,12 @@ int main(){
     empleado3.nombre = "Maria";
     inicializarLista(lista,VOID);
     printf("*****El tamano de la lista es :  %d\n\n",lista->tamano);
-    for(unsigned i = 0; i<10 ; i++){
+    for(unsigned i = 0; i<5 ; i++){
         insertar(lista,&empleado1);
         insertarUltimo(lista,&empleado2);
 
 
     }
-    insertarPorIndice(lista,&empleado3,7);
     printf("*********Se imprimiran todos los elementos de la lista*********\n\n");
     unsigned contador = 0;
     while(contador <(lista->tamano)){
@@ -31,8 +30,17 @@ int main(){
         contador++;
     }
     printf("\n*****El tamano de la lista es :  %d\n\n",lista->tamano);
-    Empleado *ptrEmpleado = obtenerPorIndice(lista, 0).Void;
-    printf("====El nombre del empleado es==== jjj: %s\n",ptrEmpleado->nombre);
+    eliminarPorIndice(lista,2);
+    eliminarPrimero(lista);
+    eliminarUltimo(lista);
+    printf("\n*****El tamano de la lista es :  %d\n\n",lista->tamano);
+
+    unsigned contador1 = 0;
+    while(contador1 <(lista->tamano)){
+        Empleado *ptrEmpleado = obtenerPorIndice(lista, contador1).Void;
+        printf("====El nombre del empleado es==== : %s\n",ptrEmpleado->nombre);
+        contador1++;
+    }
     free(lista);
 return 0;
 }
